@@ -22,7 +22,7 @@ class CekPajak
     /**
      * cek pajak
      *
-     * @param string $kode_wilayah
+     * @param string $kode_wilayah contoh H: untuk semarang
      * @param string $nomor
      * @param string $sub_wilayah
      * @return void
@@ -42,7 +42,7 @@ class CekPajak
                 ]
             ])->withHeader("accept", "application/json");
             
-            return $res->getBody();
+            return json_decode($res->getBody());
 
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
