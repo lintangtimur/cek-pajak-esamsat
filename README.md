@@ -21,12 +21,12 @@ composer require lintangtimur/cek-pajak-api
 use Stelin\CekPajakApi\CekPajak;
 
 $form = [
-    "name"=> 'lintang',
+    'name'=> 'lintang',
     'email'=> 'lintang@gmail.com',
     'password'=>'123456'
 ];
 
-$reg = new CekPajak()
+$reg = new CekPajak();
 $reg = (new CekPajak)->register($form);
 ```
 
@@ -36,12 +36,12 @@ $reg = (new CekPajak)->register($form);
 use Stelin\CekPajakApi\CekPajak;
 
 $form = [
-    "name"=> 'lintang',
+    'name'=> 'lintang',
     'email'=> 'lintang@gmail.com',
     'password'=>'123456'
 ];
 
-$login = new CekPajak()
+$login = new CekPajak();
 $login = (new CekPajak)->login($form)->accessToken;
 ```
 
@@ -50,9 +50,25 @@ $login = (new CekPajak)->login($form)->accessToken;
 <?php
 use Stelin\CekPajakApi\CekPajak;
 
-$cp = new CekPajak($accessToken)
+$cp = new CekPajak($accessToken);
 $cp->cekPajak('H','1234','AA')->totalPkbPokok;
 
 //Melihat rincian akhir pajak
 $a->cekPajak('H','1234','AA')->rincian->masaAkhirBerlakuPajak;
+```
+
+#### Contoh menggunakan SSL
+Menambah option penggunaan ssl untuk endpoint api untuk user yang mengalami error ```SSL certificate problem```
+```php
+$form = [
+    'name'=> 'lintang',
+    'email'=> 'lintang@gmail.com',
+    'password'=>'123456'
+];
+
+$login = new CekPajak();
+$accessToken = $login->ssl(true)->login($form)->accessToken; //registrasi terlebih dahulu sebelum login
+$accsess = new CekPajak($accessToken);
+$total_pokok = $accsess->ssl(true)->cekPajak('H','1234','AA')->totalPkbPokok;
+echo $total_pokok;
 ```
