@@ -17,7 +17,8 @@ class CekPajak
     private $token;
     private $ssl = false;
 
-    public function __construct($token = null) {
+    public function __construct($token = null)
+    {
         $this->token = $token;
     }
 
@@ -27,10 +28,12 @@ class CekPajak
      * @param bool $ssl
      * @return bool
      */
-    public function ssl(bool $ssl){
-        if($ssl == 'true'){
+    public function ssl(bool $ssl)
+    {
+        if ($ssl == 'true') {
             $this->ssl = true;
         }
+
         return $this;
     }
 
@@ -45,7 +48,7 @@ class CekPajak
     public function cekPajak(string $kode_wilayah, string $nomor, string $sub_wilayah)
     {
         $baseurl = 'http' . ($this->ssl ? 's' : '') . '://' . Meta::BASE_URL;
-        $client = new Client();
+        $client  = new Client();
 
         try {
             $res = $client->post($baseurl . 'api/check_pajak', [
@@ -61,7 +64,6 @@ class CekPajak
             $data = json_decode($res->getBody());
 
             return (new PajakResponse())->fromJson($data);
-
         } catch (\GuzzleHttp\Exception\ClientException $e) {
             $response = $e->getResponse();
 
@@ -81,7 +83,8 @@ class CekPajak
      * @param string $sub_wilayah
      * @return string
      */
-    private function generateSignature(string $kode_wilayah, string $nomor, string $sub_wilayah): string {
+    private function generateSignature(string $kode_wilayah, string $nomor, string $sub_wilayah): string
+    {
         return hash_hmac(Meta::ALGO, $kode_wilayah . $nomor . $sub_wilayah, Meta::SIGNKEY);
     }
 
@@ -91,9 +94,10 @@ class CekPajak
      * @param array $formRegister
      * @return void|string
      */
-    public function register(array $formRegister): ?string {
+    public function register(array $formRegister): ?string
+    {
         $baseurl = 'http' . ($this->ssl ? 's' : '') . '://' . Meta::BASE_URL;
-        $client = new Client();
+        $client  = new Client();
 
         try {
             $res = $client->post($baseurl . 'api/auth/register', [
@@ -103,6 +107,7 @@ class CekPajak
             return $res->getBody();
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $response = $e->getResponse();
+
             return $response ? $response->getBody() : '';
         }
     }
@@ -113,9 +118,10 @@ class CekPajak
      * @param array $formLogin
      * @return LoginEntity
      */
-    public function login(array $formLogin): LoginEntity {
+    public function login(array $formLogin): LoginEntity
+    {
         $baseurl = 'http' . ($this->ssl ? 's' : '') . '://' . Meta::BASE_URL;
-        $client = new Client();
+        $client  = new Client();
 
         try {
             $res = $client->post($baseurl . 'api/auth/login', [
@@ -125,6 +131,7 @@ class CekPajak
             return (new LoginEntity())->fromJson(json_decode($res->getBody()));
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             $response = $e->getResponse();
+
             return $response ? $response->getBody() : '';
         }
     }
